@@ -1,15 +1,21 @@
 ﻿using System;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 
 namespace fibcalculator {
     public class Fibonacci {
         private int number;
+   
+        [Params(1, 2, 4)] public int Number;
 
-        public int Calculate() => Calculate(number);
-        
-        public Fibonacci(int number) {
-            this.number = number;
+        [GlobalSetup]
+        public void Setup() {
+            number = Number;
         }
 
+        [Benchmark]
+        public int Calculate() => Calculate(number);
+       
         private int Calculate(int number) {
             if (number < 2) {
                 return number;
@@ -21,7 +27,7 @@ namespace fibcalculator {
     
     class Program {
         static void Main(string[] args) {
-            var fib = new Fibonacci(4);
+            var summary = BenchmarkRunner.Run<Fibonacci>();
         }
     }
 }
