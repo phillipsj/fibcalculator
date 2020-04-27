@@ -10,7 +10,7 @@ namespace fibcalculator {
         private int number;
         private Dictionary<int, int> memo;
    
-        [Params(1, 2, 4)] public int Number;
+        [Params(10, 20, 30)] public int Number;
 
         [GlobalSetup]
         public void Setup() {
