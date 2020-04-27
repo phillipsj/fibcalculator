@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using PostSharp.Patterns.Caching;
+using PostSharp.Patterns.Caching.Backends;
 
 namespace fibcalculator {
     public class Fibonacci {
@@ -14,6 +16,7 @@ namespace fibcalculator {
         public void Setup() {
             number = Number;
             memo = new Dictionary<int, int>() { {0,0}, {1,1} };
+            CachingServices.DefaultBackend = new MemoryCachingBackend();
         }
 
         [Benchmark]
@@ -35,6 +38,17 @@ namespace fibcalculator {
             }
 
             return memo[number];          
+        }
+        
+        [Benchmark]
+        public int CalculateWithCache() => CalculateWithCache(number);
+         
+        [Cache]             
+        private int CalculateWithCache(int number) {
+            if (number < 2) {
+                return number;
+            }
+            return (CalculateWithCache(number - 2) + CalculateWithCache(number - 1));
         }
     }
     
