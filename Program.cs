@@ -21,35 +21,15 @@ namespace fibcalculator {
 
         [Benchmark]
         public int Calculate() => Calculate(number);
-                     
+        
+        [Cache]             
         private int Calculate(int number) {
             if (number < 2) {
                 return number;
             }
             return (Calculate(number - 2) + Calculate(number - 1));
-        }
+        }       
         
-        [Benchmark]
-        public int CalculateWithMemo() => CalculateWithMemo(number);
-        
-        private int CalculateWithMemo(int number) {
-            if(!memo.ContainsKey(number)) {
-                memo[number] = (CalculateWithMemo(number - 2)) + (CalculateWithMemo(number - 1));
-            }
-
-            return memo[number];          
-        }
-        
-        [Benchmark]
-        public int CalculateWithCache() => CalculateWithCache(number);
-         
-        [Cache]             
-        private int CalculateWithCache(int number) {
-            if (number < 2) {
-                return number;
-            }
-            return (CalculateWithCache(number - 2) + CalculateWithCache(number - 1));
-        }
     }
     
     class Program {
